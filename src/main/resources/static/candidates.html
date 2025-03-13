@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список кандидатов</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<h1>Список кандидатов</h1>
+<button onclick="loadCandidates()">Загрузить кандидатов</button>
+
+<table id="candidatesTable" style="display: none;">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Данные будут вставлены сюда -->
+    </tbody>
+</table>
+
+<script>
+    function loadCandidates() {
+        fetch('api/candidates')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector('#candidatesTable tbody');
+                tableBody.innerHTML = ''; // Очищаем таблицу перед добавлением новых данных
+
+                data.forEach(candidate => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                            <td>${candidate.id}</td>
+                            <td>${candidate.name}</td>
+                            <td>${candidate.email}</td>
+                        `;
+                    tableBody.appendChild(row);
+                });
+
+                // Показываем таблицу после загрузки данных
+                document.getElementById('candidatesTable').style.display = 'table';
+            })
+            .catch(error => console.error('Ошибка:', error));
+    }
+</script>
+</body>
+</html>
